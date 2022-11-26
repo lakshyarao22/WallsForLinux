@@ -1,0 +1,20 @@
+#!/bin/sh
+
+cd /home/$USER/.cache
+
+mv wallpaper-cache.jpg wallpaper.jpg
+
+#Set the lock screen background to the image
+gsettings set org.gnome.desktop.screensaver picture-uri-dark file:///home/$USER/.cache/wallpaper.jpg
+gsettings set org.gnome.desktop.screensaver picture-uri file:///home/$USER/.cache/wallpaper.jpg
+
+#Set the desktop background to the image
+gsettings set org.gnome.desktop.background picture-uri-dark file:///home/$USER/.cache/wallpaper.jpg
+gsettings set org.gnome.desktop.background picture-uri file:///home/$USER/.cache/wallpaper.jpg
+
+#Set the login screen background to the image
+gsettings set org.gnome.login-screen picture-uri-dark file:///home/$USER/.cache/wallpaper.jpg
+gsettings set org.gnome.login-screen picture-uri file:///home/$USER/.cache/wallpaper.jpg
+
+#fetch new wallpaper for future use
+curl -Lo wallpaper-cache.jpg -s $(curl -s -X GET "https://api.unsplash.com/photos/random?orientation=landscape&query=wallpaper" -H "Authorization: Client-ID NbF43cYWM3XmKWXAxRt3zMnZ4KPxguOohbVc5mku2-A" | jq '.["urls"]["full"]' | tr -d '"') && gsettings set org.gnome.desktop.background picture-uri file:///home/$USER/.cache/wallpaper.jpg
