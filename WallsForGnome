@@ -1,8 +1,10 @@
 #!/bin/sh
 
-unsplashApiKey="" # Enter Your Unsplash Access Key
-
 query="wallpaper" # Give a query to fetch wallpaper
+
+resolution="$(xdpyinfo  | grep -oP 'dimensions:\s+\K\S+')"
+
+orentation="landscape"
 
 #go
 cd /home/$USER/.cache
@@ -21,4 +23,4 @@ gsettings set org.gnome.login-screen picture-uri-dark file:///home/$USER/.cache/
 gsettings set org.gnome.login-screen picture-uri file:///home/$USER/.cache/wallpaper.jpg
 
 #Fetching new wallpaper for future use
-curl -Lo wallpaper-cache.jpg -s $(curl -s -X GET "https://api.unsplash.com/photos/random?orientation=landscape&query=$(echo $query)" -H "Authorization: Client-ID $(echo $unsplashApiKey)" | jq '.["urls"]["raw"]' | tr -d '"')
+curl -Lo wallpaper-cache.jpg -s 'https://source.unsplash.com/random/$resolution/?$query,$orentation'
